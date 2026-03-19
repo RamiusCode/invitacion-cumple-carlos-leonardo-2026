@@ -1,0 +1,438 @@
+---
+// Reproductor.astro - XV Años Varón Edition ✨
+---
+
+<div class="w-full max-w-[300px] mx-auto px-4" id="music-player-container">
+  <!-- Card glassmorphism varón -->
+  <div class="cal-card rounded-3xl p-6 relative" id="player-card">
+    <!-- Destellos -->
+    <div class="sparkle sparkle-1"></div>
+    <div class="sparkle sparkle-2"></div>
+    <div class="sparkle sparkle-3"></div>
+
+    <div class="relative z-10 flex flex-col items-center gap-5">
+      <!-- Título -->
+      <div class="text-center" id="player-title">
+        <p class="font-scotlandia text-xl tracking-[0.15em] titulo-player">
+          Reproduce la cación
+        </p>
+        <!-- <p class="font-charm text-xs tracking-[0.2em] mt-1 subtitulo-player">
+          ♪ XV Años ♪
+        </p> -->
+      </div>
+
+      <!-- Separador -->
+      <div class="linea-player w-full"></div>
+
+      <!-- Botones -->
+      <div
+        class="flex items-center justify-center gap-8"
+        id="controls-container"
+      >
+        <!-- Anterior -->
+        <button
+          id="prevBtn"
+          class="btn-control p-2 rounded-full transition-all duration-300"
+        >
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M7 6v12l-2-2V8l2-2zm2 6l8-5v10l-8-5z"></path>
+          </svg>
+        </button>
+
+        <!-- Play/Pause -->
+        <button
+          id="playPauseBtn"
+          class="btn-play relative transition-all duration-300 hover:scale-110 focus:outline-none"
+        >
+          <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
+            <!-- Círculo de fondo -->
+            <circle
+              cx="26"
+              cy="26"
+              r="25"
+              fill="rgba(65,105,255,0.15)"
+              stroke="rgba(65,105,255,0.7)"
+              stroke-width="1.5"></circle>
+            <!-- Icono play -->
+            <g id="play-icon">
+              <polygon points="20,16 38,26 20,36" fill="#4169ff"></polygon>
+            </g>
+            <!-- Icono pause -->
+            <g id="pause-icon" class="hidden">
+              <rect x="17" y="15" width="6" height="22" rx="2" fill="#4169ff"
+              ></rect>
+              <rect x="29" y="15" width="6" height="22" rx="2" fill="#4169ff"
+              ></rect>
+            </g>
+          </svg>
+          <div
+            class="absolute inset-0 rounded-full btn-play-glow pointer-events-none"
+          >
+          </div>
+        </button>
+
+        <!-- Siguiente -->
+        <button
+          id="nextBtn"
+          class="btn-control p-2 rounded-full transition-all duration-300"
+        >
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17 18V6l2 2v8l-2 2zm-2-6L7 7v10l8-5z"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Barra de progreso -->
+      <div class="w-full px-1" id="progress-container">
+        <div
+          class="flex justify-between text-xs mb-2 time-text font-charm tracking-wider"
+        >
+          <span id="currentTime">0:00</span>
+          <span id="totalDuration">--:--</span>
+        </div>
+        <input
+          type="range"
+          id="progressBar"
+          value="0"
+          max="100"
+          class="w-full h-1.5 rounded-full appearance-none cursor-pointer slider-player"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+
+<audio id="music-audio" preload="auto">
+  <source src="/audio/melodia.mp3" type="audio/mpeg" />
+</audio>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  gsap.registerPlugin(ScrollTrigger);
+
+  let isPlaying = false;
+  let duration = 0;
+
+  document.addEventListener("DOMContentLoaded", () => {
+    gsap.set("#music-player-container", { opacity: 0, y: 40, scale: 0.95 });
+
+    ScrollTrigger.create({
+      trigger: "#music-player-container",
+      start: "top 90%",
+      onEnter: () => {
+        gsap.to("#music-player-container", {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.8,
+          ease: "back.out(1.4)",
+        });
+        // Pulso botón play
+        gsap.to(".btn-play-glow", {
+          boxShadow:
+            "0 0 20px rgba(65,105,255,0.7), 0 0 40px rgba(65,105,255,0.3)",
+          duration: 1.8,
+          ease: "sine.inOut",
+          yoyo: true,
+          repeat: -1,
+          delay: 1,
+        });
+        // Destellos
+        gsap.to(".sparkle-1", {
+          y: -6,
+          opacity: 0.6,
+          duration: 2.8,
+          ease: "sine.inOut",
+          yoyo: true,
+          repeat: -1,
+        });
+        gsap.to(".sparkle-2", {
+          y: -4,
+          opacity: 0.4,
+          duration: 3.4,
+          ease: "sine.inOut",
+          yoyo: true,
+          repeat: -1,
+          delay: 0.8,
+        });
+        gsap.to(".sparkle-3", {
+          y: -8,
+          opacity: 0.5,
+          duration: 2.2,
+          ease: "sine.inOut",
+          yoyo: true,
+          repeat: -1,
+          delay: 1.5,
+        });
+      },
+      onLeaveBack: () => {
+        gsap.set("#music-player-container", { opacity: 0, y: 40, scale: 0.95 });
+      },
+    });
+
+    const audio = document.getElementById("music-audio") as HTMLAudioElement;
+    const playBtn = document.getElementById("playPauseBtn");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const progressBar = document.getElementById(
+      "progressBar",
+    ) as HTMLInputElement;
+    const playIcon = document.getElementById("play-icon");
+    const pauseIcon = document.getElementById("pause-icon");
+
+    audio?.addEventListener("loadedmetadata", () => {
+      duration = audio.duration;
+      updateTime();
+    });
+
+    playBtn?.addEventListener("click", () => {
+      if (!isPlaying) {
+        audio?.play();
+        playIcon?.classList.add("hidden");
+        pauseIcon?.classList.remove("hidden");
+        gsap.to(playBtn, {
+          scale: 1.15,
+          duration: 0.15,
+          yoyo: true,
+          repeat: 1,
+          ease: "power2.out",
+        });
+        isPlaying = true;
+        startProgress();
+      } else {
+        audio?.pause();
+        playIcon?.classList.remove("hidden");
+        pauseIcon?.classList.add("hidden");
+        isPlaying = false;
+      }
+    });
+
+    prevBtn?.addEventListener("click", () =>
+      gsap.to(prevBtn, { scale: 1.2, duration: 0.1, yoyo: true, repeat: 1 }),
+    );
+    nextBtn?.addEventListener("click", () =>
+      gsap.to(nextBtn, { scale: 1.2, duration: 0.1, yoyo: true, repeat: 1 }),
+    );
+
+    progressBar?.addEventListener("input", () => {
+      if (audio) {
+        audio.currentTime = (Number(progressBar.value) / 100) * audio.duration;
+        updateTime();
+      }
+    });
+
+    function startProgress() {
+      const interval = setInterval(() => {
+        if (!isPlaying) {
+          clearInterval(interval);
+          return;
+        }
+        if (audio) {
+          duration = audio.duration || duration;
+          if (audio.currentTime >= duration) {
+            isPlaying = false;
+            playIcon?.classList.remove("hidden");
+            pauseIcon?.classList.add("hidden");
+            clearInterval(interval);
+          }
+          if (progressBar)
+            progressBar.value = String(
+              duration > 0 ? (audio.currentTime / duration) * 100 : 0,
+            );
+          updateTime();
+        }
+      }, 100);
+    }
+
+    function updateTime() {
+      const cur = document.getElementById("currentTime");
+      const tot = document.getElementById("totalDuration");
+      if (audio && cur) {
+        const m = Math.floor(audio.currentTime / 60);
+        const s = Math.floor(audio.currentTime % 60);
+        cur.textContent = `${m}:${s.toString().padStart(2, "0")}`;
+      }
+      if (audio?.duration && tot) {
+        const m = Math.floor(audio.duration / 60);
+        const s = Math.floor(audio.duration % 60);
+        tot.textContent = `${m}:${s.toString().padStart(2, "0")}`;
+      }
+    }
+  });
+</script>
+
+<style>
+  /* ─── CARD GLASSMORPHISM ─── */
+  .cal-card {
+    background: rgba(0, 4, 20, 0.45);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1.5px solid rgba(65, 105, 255, 0.35);
+    box-shadow:
+      0 8px 40px rgba(65, 105, 255, 0.18),
+      0 2px 8px rgba(255, 255, 255, 0.05),
+      inset 0 1px 0 rgba(65, 105, 255, 0.2);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .cal-card::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: 10%;
+    width: 80%;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(65, 105, 255, 0.7),
+      #fff,
+      rgba(65, 105, 255, 0.7),
+      transparent
+    );
+    border-radius: 50%;
+  }
+
+  .cal-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      ellipse at 50% 0%,
+      rgba(65, 105, 255, 0.08) 0%,
+      transparent 70%
+    );
+    pointer-events: none;
+  }
+
+  /* ─── TEXTOS ─── */
+  .titulo-player {
+    color: #ffffff;
+    text-shadow:
+      0 0 4px #ffffff,
+      0 0 10px #4169ff,
+      0 0 22px #4169ff,
+      0 0 45px #2233cc;
+    animation: neonKF 3s ease-in-out infinite;
+  }
+
+  .subtitulo-player {
+    color: rgba(65, 105, 255, 0.7);
+    text-shadow: 0 0 8px rgba(65, 105, 255, 0.4);
+  }
+
+  .time-text {
+    color: rgba(65, 105, 255, 0.6);
+  }
+
+  /* ─── SEPARADOR ─── */
+  .linea-player {
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(65, 105, 255, 0.5),
+      rgba(255, 255, 255, 0.4),
+      rgba(65, 105, 255, 0.5),
+      transparent
+    );
+  }
+
+  /* ─── BOTONES PREV/NEXT ─── */
+  .btn-control {
+    color: rgba(65, 105, 255, 0.6);
+    transition: all 0.3s ease;
+  }
+  .btn-control:hover {
+    color: #4169ff;
+    background: rgba(65, 105, 255, 0.12);
+    box-shadow: 0 0 12px rgba(65, 105, 255, 0.3);
+  }
+
+  /* ─── BOTÓN PLAY ─── */
+  .btn-play {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .btn-play-glow {
+    border-radius: 50%;
+    transition: box-shadow 0.3s;
+  }
+
+  /* ─── BARRA DE PROGRESO ─── */
+  .slider-player {
+    background: rgba(65, 105, 255, 0.2);
+    outline: none;
+  }
+  .slider-player::-webkit-slider-thumb {
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #4169ff;
+    cursor: pointer;
+    box-shadow: 0 0 8px rgba(65, 105, 255, 0.7);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+  }
+  .slider-player::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #4169ff;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 8px rgba(65, 105, 255, 0.7);
+  }
+
+  /* ─── NEÓN KEYFRAME ─── */
+  @keyframes neonKF {
+    0%,
+    100% {
+      text-shadow:
+        0 0 4px #fff,
+        0 0 10px #4169ff,
+        0 0 22px #4169ff,
+        0 0 45px #2233cc;
+    }
+    50% {
+      text-shadow:
+        0 0 2px #fff,
+        0 0 6px #2244dd,
+        0 0 14px #2233bb;
+    }
+  }
+
+  /* ─── DESTELLOS ─── */
+  .sparkle {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0.3;
+  }
+  .sparkle-1 {
+    width: 5px;
+    height: 5px;
+    background: #4169ff;
+    top: 8%;
+    right: 8%;
+    box-shadow: 0 0 8px 3px rgba(65, 105, 255, 0.7);
+  }
+  .sparkle-2 {
+    width: 3px;
+    height: 3px;
+    background: #fff;
+    top: 18%;
+    left: 10%;
+    box-shadow: 0 0 6px 2px rgba(255, 255, 255, 0.5);
+  }
+  .sparkle-3 {
+    width: 4px;
+    height: 4px;
+    background: #6688ff;
+    bottom: 12%;
+    right: 12%;
+    box-shadow: 0 0 8px 3px rgba(102, 136, 255, 0.5);
+  }
+</style>

@@ -1,0 +1,166 @@
+---
+// Padres.astro - XV Años Varón Edition ✨
+---
+
+<section class="py-8 relative">
+  <div class="max-w-5xl mx-auto relative">
+    <!-- Adorno izquierdo -->
+    <div
+      class="absolute -left-0 top-0 w-16 md:w-20 lg:w-28 pointer-events-none"
+      id="adorno-izq"
+    >
+      <img
+        src="/imagenes/discolateral.png"
+        alt="Adorno"
+        class="w-10 h-full object-contain object-left"
+      />
+    </div>
+
+    <!-- Contenido central -->
+    <div
+      class="max-w-xl mx-auto text-center relative z-10 px-16 md:px-24 lg:px-32"
+    >
+      <div id="seccion-padres">
+        <!-- Título -->
+        <h2
+          class="font-scotlandia text-2xl tracking-[0.2em] titulo-padres mb-4"
+        >
+          MIS PADRES
+        </h2>
+
+        <!-- Separador -->
+        <div class="separador-padres mb-4"></div>
+
+        <!-- Nombres -->
+        <div class="space-y-2">
+          <p class="font-great-vibes text-2xl nombre-padres">
+            Carlos Rodríguez
+          </p>
+          <p class="font-great-vibes text-2xl nombre-padres">Isabel Mendoza</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Adorno derecho -->
+    <div
+      class="absolute -right-6 top-0 w-16 md:w-20 lg:w-28 pointer-events-none"
+      id="adorno-der"
+    >
+      <img
+        src="/imagenes/discolateral.png"
+        alt="Adorno"
+        class="w-10 h-full object-contain object-right scale-x-[-1]"
+      />
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  gsap.registerPlugin(ScrollTrigger);
+
+  if (typeof window !== "undefined") {
+    document.addEventListener("DOMContentLoaded", () => {
+      gsap.set("#seccion-padres", { opacity: 0, y: 30 });
+      gsap.set("#adorno-izq", { opacity: 0, x: -30 });
+      gsap.set("#adorno-der", { opacity: 0, x: 30 });
+
+      ScrollTrigger.create({
+        trigger: "#seccion-padres",
+        start: "top 90%",
+        onEnter: () => {
+          const tl = gsap.timeline();
+          tl.to("#adorno-izq, #adorno-der, #seccion-padres", {
+            opacity: 1,
+            duration: 1,
+            ease: "power2.out",
+          })
+            .to("#adorno-izq", { x: 0, duration: 1, ease: "power2.out" }, "<")
+            .to("#adorno-der", { x: 0, duration: 1, ease: "power2.out" }, "<")
+            .to(
+              "#seccion-padres",
+              { y: 0, duration: 1, ease: "power2.out" },
+              "<",
+            );
+        },
+        onLeaveBack: () => {
+          const tl = gsap.timeline();
+          tl.to("#adorno-izq, #adorno-der, #seccion-padres", {
+            opacity: 0,
+            duration: 0.5,
+            ease: "power2.in",
+          })
+            .to(
+              "#adorno-izq",
+              { x: -30, duration: 0.5, ease: "power2.in" },
+              "<",
+            )
+            .to("#adorno-der", { x: 30, duration: 0.5, ease: "power2.in" }, "<")
+            .to(
+              "#seccion-padres",
+              { y: 30, duration: 0.5, ease: "power2.in" },
+              "<",
+            );
+        },
+      });
+    });
+  }
+</script>
+
+<style>
+  /* ─── TÍTULO ─── */
+  .titulo-padres {
+    color: #ffffff;
+    text-shadow:
+      0 0 4px #ffffff,
+      0 0 10px #4169ff,
+      0 0 22px #4169ff,
+      0 0 45px #2233cc;
+    animation: neonKF 3s ease-in-out infinite;
+  }
+
+  /* ─── SEPARADOR ─── */
+  .separador-padres {
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(65, 105, 255, 0.5),
+      rgba(255, 255, 255, 0.6),
+      rgba(65, 105, 255, 0.5),
+      transparent
+    );
+    margin: 0 2rem;
+  }
+
+  /* ─── NOMBRES ─── */
+  .nombre-padres {
+    color: #ffffff;
+    text-shadow:
+      0 0 4px #ffffff,
+      0 0 10px #4169ff,
+      0 0 22px #4169ff,
+      0 0 45px #2233cc;
+    animation: neonKF 3s ease-in-out infinite;
+  }
+
+  @keyframes neonKF {
+    0%,
+    100% {
+      text-shadow:
+        0 0 4px #ffffff,
+        0 0 10px #4169ff,
+        0 0 22px #4169ff,
+        0 0 45px #2233cc,
+        0 0 80px #1122aa;
+    }
+    50% {
+      text-shadow:
+        0 0 2px #ffffff,
+        0 0 6px #2244dd,
+        0 0 14px #2233bb,
+        0 0 28px #111888;
+    }
+  }
+</style>

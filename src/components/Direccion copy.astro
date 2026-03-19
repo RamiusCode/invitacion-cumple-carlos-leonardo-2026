@@ -1,0 +1,272 @@
+---
+// Direccion.astro - XV Años Varón Edition ✨
+---
+
+<section class="py-8 px-4 relative">
+  <div class="max-w-xl mx-auto text-center relative">
+    <!-- TÍTULO -->
+    <div class="mb-4" id="titulo-direccion">
+      <h2
+        class="font-cormorant text-2xl md:text-3xl font-bold tracking-wide titulo-dir"
+      >
+        RECEPCIÓN SOCIAL
+      </h2>
+    </div>
+
+    <!-- ICONO PIN SVG -->
+    <div class="flex justify-center mb-4" id="icono-direccion">
+      <div class="icono-wrap">
+        <svg
+          class="icono-pin"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          width="64"
+          height="64"
+        >
+          <path
+            d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"
+          ></path>
+        </svg>
+      </div>
+    </div>
+
+    <!-- INFO -->
+    <div class="mb-5" id="info-direccion">
+      <h3
+        class="font-cormorant text-xl md:text-2xl font-bold mb-2 nombre-lugar"
+      >
+        Casa Quinta los Pichones
+      </h3>
+      <p class="font-cormorant text-xl md:text-2xl font-bold hora-dir">
+        Hora: 19:00
+      </p>
+    </div>
+
+    <!-- BOTÓN -->
+    <div class="flex justify-center" id="boton-ubicacion">
+      <a
+        href="https://maps.app.goo.gl/fTdPo2GRJhHXhpSx7"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="boton-ubicacion-custom group"
+        style="white-space:nowrap;"
+      >
+        <svg
+          class="boton-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+        >
+          <path
+            d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"
+          ></path>
+        </svg>
+        <span
+          class="font-cormorant text-lg font-bold boton-texto"
+          style="white-space:nowrap;">Ver Ubicación</span
+        >
+        <span class="boton-brillo"></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  gsap.registerPlugin(ScrollTrigger);
+
+  if (typeof window !== "undefined") {
+    document.addEventListener("DOMContentLoaded", () => {
+      gsap.set("#icono-direccion", { opacity: 0, scale: 0.8 });
+      gsap.set("#titulo-direccion", { opacity: 0, scale: 0.9 });
+      gsap.set("#info-direccion", { opacity: 0, scale: 0.9 });
+      gsap.set("#boton-ubicacion", { opacity: 0, scale: 0.9 });
+
+      ScrollTrigger.create({
+        trigger: "#titulo-direccion",
+        start: "top 85%",
+        onEnter: () => {
+          const tl = gsap.timeline();
+          tl.to(
+            "#icono-direccion, #titulo-direccion, #info-direccion, #boton-ubicacion",
+            { opacity: 1, duration: 1, ease: "power2.out" },
+          )
+            .to(
+              "#icono-direccion",
+              { scale: 1, duration: 1, ease: "back.out(1.5)" },
+              "<",
+            )
+            .to(
+              "#titulo-direccion, #info-direccion, #boton-ubicacion",
+              { scale: 1, duration: 1, ease: "back.out(1.2)" },
+              "<",
+            );
+
+          // Pulso icono
+          gsap.to(".icono-pin", {
+            filter:
+              "drop-shadow(0 0 14px rgba(65,105,255,1)) drop-shadow(0 0 28px rgba(65,105,255,0.6))",
+            duration: 2,
+            ease: "sine.inOut",
+            yoyo: true,
+            repeat: -1,
+            delay: 1,
+          });
+          // Pulso botón
+          gsap.to(".boton-ubicacion-custom", {
+            boxShadow:
+              "0 0 24px rgba(65,105,255,0.8), 0 0 48px rgba(65,105,255,0.3)",
+            duration: 2,
+            ease: "sine.inOut",
+            yoyo: true,
+            repeat: -1,
+            delay: 1.5,
+          });
+        },
+        onLeaveBack: () => {
+          gsap.set("#icono-direccion", { opacity: 0, scale: 0.8 });
+          gsap.set("#titulo-direccion", { opacity: 0, scale: 0.9 });
+          gsap.set("#info-direccion", { opacity: 0, scale: 0.9 });
+          gsap.set("#boton-ubicacion", { opacity: 0, scale: 0.9 });
+        },
+      });
+    });
+  }
+</script>
+
+<style>
+  /* ─── TÍTULO ─── */
+  .titulo-dir {
+    color: #ffffff;
+    text-shadow:
+      0 0 4px #ffffff,
+      0 0 10px #4169ff,
+      0 0 22px #4169ff,
+      0 0 45px #2233cc;
+    animation: neonKF 3s ease-in-out infinite;
+    letter-spacing: 0.1em;
+  }
+
+  /* ─── ICONO PIN ─── */
+  .icono-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .icono-pin {
+    color: #4169ff;
+    filter: drop-shadow(0 0 8px rgba(65, 105, 255, 0.9))
+      drop-shadow(0 0 20px rgba(65, 105, 255, 0.5))
+      drop-shadow(0 0 4px rgba(0, 232, 255, 0.3));
+    transition: filter 0.3s ease;
+  }
+
+  /* ─── NOMBRE DEL LUGAR ─── */
+  .nombre-lugar {
+    color: #ffffff;
+    text-shadow:
+      0 0 4px #ffffff,
+      0 0 10px #4169ff,
+      0 0 22px #4169ff,
+      0 0 45px #2233cc;
+    animation: neonKF 3s ease-in-out infinite;
+  }
+
+  /* ─── HORA ─── */
+  .hora-dir {
+    color: rgba(0, 232, 255, 0.9);
+    text-shadow:
+      0 0 10px rgba(0, 232, 255, 0.7),
+      0 0 22px rgba(0, 232, 255, 0.4),
+      0 0 8px rgba(65, 105, 255, 0.3);
+  }
+
+  /* ─── BOTÓN ─── */
+  .boton-ubicacion-custom {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 32px;
+    border-radius: 50px;
+    background: linear-gradient(
+      135deg,
+      rgba(65, 105, 255, 0.2) 0%,
+      rgba(255, 255, 255, 0.08) 50%,
+      rgba(65, 105, 255, 0.2) 100%
+    );
+    border: 1.5px solid rgba(65, 105, 255, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow:
+      0 0 16px rgba(65, 105, 255, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    transition:
+      transform 0.3s ease,
+      border-color 0.3s ease;
+  }
+
+  .boton-ubicacion-custom:hover {
+    transform: scale(1.06) translateY(-2px);
+    border-color: rgba(65, 105, 255, 0.95);
+  }
+
+  .boton-icon {
+    width: 22px;
+    height: 22px;
+    color: #4169ff;
+    filter: drop-shadow(0 0 6px rgba(65, 105, 255, 0.9));
+    flex-shrink: 0;
+  }
+
+  .boton-texto {
+    color: #ffffff;
+    text-shadow:
+      0 0 10px rgba(65, 105, 255, 0.7),
+      0 1px 3px rgba(0, 0, 0, 0.3);
+    letter-spacing: 0.05em;
+  }
+
+  .boton-brillo {
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
+    transform: skewX(-20deg);
+    transition: left 0.5s ease;
+  }
+  .boton-ubicacion-custom:hover .boton-brillo {
+    left: 125%;
+  }
+
+  /* ─── NEÓN ─── */
+  @keyframes neonKF {
+    0%,
+    100% {
+      text-shadow:
+        0 0 4px #fff,
+        0 0 10px #4169ff,
+        0 0 22px #4169ff,
+        0 0 45px #2233cc;
+    }
+    50% {
+      text-shadow:
+        0 0 2px #fff,
+        0 0 6px #2244dd,
+        0 0 14px #2233bb;
+    }
+  }
+</style>

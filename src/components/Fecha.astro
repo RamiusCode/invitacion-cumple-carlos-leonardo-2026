@@ -1,0 +1,189 @@
+---
+// FechaEvento.astro - XV Años Varón Edition ✨
+---
+
+<section class="px-4">
+  <div class="max-w-2xl mx-auto text-center">
+    <!-- Texto acompáñanos -->
+    <div class="mb-6" id="texto-invitacion-container">
+      <div id="texto-invitacion">
+        <p
+          class="font-cormorant text-2xl sm:text-3xl md:text-4xl leading-relaxed text-center texto-invitacion"
+        >
+          Acompáñanos este día<br />tan especial
+        </p>
+      </div>
+    </div>
+
+    <!-- Fecha -->
+    <div class="relative max-w-md mx-auto" id="fecha-evento">
+      <div class="flex items-center justify-center gap-4 md:gap-6">
+        <!-- SÁBADO -->
+        <div class="flex flex-col items-center w-24 md:w-28">
+          <div class="w-full h-px linea-fecha mb-2"></div>
+          <span
+            class="font-cormorant text-xl md:text-lg uppercase tracking-wider font-bold text-center dia-mes"
+          >
+            MIÉRCOLES
+          </span>
+          <div class="w-full h-px linea-fecha mt-2"></div>
+        </div>
+
+        <!-- Número día -->
+        <div
+          class="flex items-center justify-center min-w-[80px] md:min-w-[100px]"
+        >
+          <span class="font-cormorant text-7xl md:text-8xl font-bold numero-dia"
+            >25</span
+          >
+        </div>
+
+        <!-- MARZO -->
+        <div class="flex flex-col items-center w-24 md:w-28">
+          <div class="w-full h-px linea-fecha mb-2"></div>
+          <span
+            class="font-cormorant text-xl md:text-lg uppercase tracking-wider font-bold text-center dia-mes"
+          >
+            MARZO
+          </span>
+          <div class="w-full h-px linea-fecha mt-2"></div>
+        </div>
+      </div>
+
+      <!-- Año -->
+      <div class="mt-2 flex justify-center" id="anio-evento">
+        <p class="font-cormorant text-3xl md:text-4xl font-bold anio-texto">
+          2026
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  gsap.registerPlugin(ScrollTrigger);
+
+  if (typeof window !== "undefined") {
+    document.addEventListener("DOMContentLoaded", () => {
+      gsap.set("#flores-fecha", { opacity: 0, scale: 0.8 });
+      gsap.set("#texto-invitacion", { opacity: 0, scale: 0.9 });
+      gsap.set("#fecha-evento", { opacity: 0, scale: 0.9 });
+      gsap.set("#anio-evento", { opacity: 0, scale: 0.9 });
+
+      ScrollTrigger.create({
+        trigger: "#flores-fecha",
+        start: "top 85%",
+        onEnter: () => {
+          const tl = gsap.timeline();
+          tl.to(
+            "#flores-fecha, #texto-invitacion, #fecha-evento, #anio-evento",
+            { opacity: 1, duration: 1, ease: "power2.out" },
+          )
+            .to(
+              "#flores-fecha",
+              { scale: 1, duration: 1, ease: "back.out(1.4)" },
+              "<",
+            )
+            .to(
+              "#texto-invitacion, #fecha-evento, #anio-evento",
+              { scale: 1, duration: 1, ease: "back.out(1.2)" },
+              "<",
+            );
+
+          // Pulso neón en número del día
+          gsap.to(".numero-dia", {
+            textShadow:
+              "0 0 20px rgba(65,105,255,1), 0 0 40px rgba(65,105,255,0.6), 0 0 80px rgba(65,105,255,0.3)",
+            duration: 2,
+            ease: "sine.inOut",
+            yoyo: true,
+            repeat: -1,
+            delay: 1,
+          });
+        },
+        onLeaveBack: () => {
+          gsap.set("#flores-fecha", { opacity: 0, scale: 0.8 });
+          gsap.set("#texto-invitacion", { opacity: 0, scale: 0.9 });
+          gsap.set("#fecha-evento", { opacity: 0, scale: 0.9 });
+          gsap.set("#anio-evento", { opacity: 0, scale: 0.9 });
+        },
+      });
+    });
+  }
+</script>
+
+<style>
+  /* ─── TEXTO ACOMPÁÑANOS ─── */
+  .texto-invitacion {
+    color: #ffffff;
+    text-shadow:
+      0 0 8px rgba(65, 105, 255, 0.5),
+      0 1px 4px rgba(0, 0, 0, 0.4);
+  }
+
+  /* ─── SÁBADO / MARZO ─── */
+  .dia-mes {
+    color: #00e8ff;
+    text-shadow:
+      0 0 6px #00f5ff,
+      0 0 14px #00c8e0,
+      0 0 28px rgba(0, 232, 255, 0.5);
+  }
+
+  /* ─── NÚMERO 28 ─── */
+  .numero-dia {
+    color: #ffffff;
+    text-shadow:
+      0 0 4px #ffffff,
+      0 0 10px #4169ff,
+      0 0 22px #4169ff,
+      0 0 45px #2233cc,
+      0 0 80px #1122aa;
+    animation: neonKF 3s ease-in-out infinite;
+  }
+
+  /* ─── AÑO ─── */
+  .anio-texto {
+    color: #ffffff;
+    text-shadow:
+      0 0 4px #ffffff,
+      0 0 10px #4169ff,
+      0 0 20px #4169ff;
+    opacity: 0.85;
+  }
+
+  /* ─── LÍNEAS ─── */
+  .linea-fecha {
+    background: linear-gradient(
+      to right,
+      transparent,
+      rgba(65, 105, 255, 0.7),
+      rgba(0, 232, 255, 0.5),
+      rgba(65, 105, 255, 0.7),
+      transparent
+    );
+    opacity: 0.8;
+  }
+
+  /* ─── NEÓN KEYFRAME ─── */
+  @keyframes neonKF {
+    0%,
+    100% {
+      text-shadow:
+        0 0 4px #ffffff,
+        0 0 10px #4169ff,
+        0 0 22px #4169ff,
+        0 0 45px #2233cc,
+        0 0 80px #1122aa;
+    }
+    50% {
+      text-shadow:
+        0 0 2px #ffffff,
+        0 0 6px #2244dd,
+        0 0 14px #2233bb,
+        0 0 28px #111888;
+    }
+  }
+</style>

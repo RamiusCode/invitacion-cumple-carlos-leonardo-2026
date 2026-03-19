@@ -1,0 +1,366 @@
+---
+// Hero.astro - XV Años Varón Edition ✨
+import ReproductorMusica from "../components/ReproductorMusica.astro";
+---
+
+<section class="relative w-full pt-15 overflow-x-hidden hero-varon">
+    <canvas
+        id="disco-particles"
+        class="absolute inset-0 w-full h-full pointer-events-none z-0"></canvas>
+    <div
+        id="sparkle-layer"
+        class="absolute inset-0 pointer-events-none z-0 overflow-hidden"
+    >
+    </div>
+
+    <!-- FONDO -->
+    <div class="absolute inset-0 z-0">
+        <img
+            src="/imagenes/fondo3.png"
+            alt="Fondo"
+            class="w-full h-full object-cover object-center"
+        />
+    </div>
+
+    <div
+        class="relative w-full min-h-screen flex items-center justify-center px-6 z-10"
+    >
+        <div class="text-center w-full max-w-xl flex flex-col items-center">
+            <!-- Línea decorativa superior -->
+            <div class="linea-deco w-64 mb-12" id="linea-sup"></div>
+
+            <!-- QUINCE AÑOS -->
+            <h1
+                class="font-scotlandia text-4xl md:text-8xl tracking-[0.15em] mb-10 leading-tight quince-word whitespace-nowrap"
+                id="titulo-quince"
+            >
+                Mis Quince Años
+            </h1>
+
+            <!-- Ornamento -->
+            <div class="ornamento w-full mb-10" id="ornamento">
+                <span class="ornam-linea"></span>
+                <span class="ornam-diamante text-sm">◆</span>
+                <span class="ornam-linea"></span>
+            </div>
+
+            <!-- NOMBRE -->
+            <h2
+                class="font-great-vibes nombre-varon mb-10"
+                id="nombre-typewriter"
+            >
+            </h2>
+
+            <!-- Línea decorativa inferior -->
+            <div class="linea-deco w-64 mb-10" id="linea-inf"></div>
+
+            <!-- ACOMPAÑAME -->
+            <p
+                class="font-cormorant text-2xl md:text-2xl italic mb-8"
+                id="texto-acompana"
+                style="color: rgba(255,255,255,0.85); text-shadow: 0 0 8px rgba(65,105,255,0.5), 0 1px 4px rgba(0,0,0,0.4);"
+            >
+                ¡Acompáñame a celebrar este día tan especial!
+            </p>
+
+            <!-- REPRODUCTOR — debajo del texto acompáñame -->
+            <div class="w-full">
+                <ReproductorMusica />
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    import { gsap } from "gsap";
+
+    document.addEventListener("DOMContentLoaded", () => {
+        /* Partículas azul eléctrico */
+        (function () {
+            const canvas = document.getElementById(
+                "disco-particles",
+            ) as HTMLCanvasElement;
+            if (!canvas) return;
+            const ctx = canvas.getContext("2d")!;
+            function resize() {
+                canvas.width = canvas.parentElement!.offsetWidth;
+                canvas.height = canvas.parentElement!.offsetHeight;
+            }
+            resize();
+            window.addEventListener("resize", resize);
+            const colors = [
+                "#4169ff",
+                "#6688ff",
+                "#ffffff",
+                "#00e8ff",
+                "#2244dd",
+                "#99aaff",
+            ];
+            const dots = Array.from({ length: 80 }, () => ({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                r: 0.6 + Math.random() * 2.2,
+                vx: (Math.random() - 0.5) * 0.35,
+                vy: (Math.random() - 0.5) * 0.35,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                alpha: 0.15 + Math.random() * 0.65,
+            }));
+            let frame = 0;
+            (function tick() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                frame++;
+                dots.forEach((d: any) => {
+                    d.x += d.vx;
+                    d.y += d.vy;
+                    if (d.x < 0) d.x = canvas.width;
+                    if (d.x > canvas.width) d.x = 0;
+                    if (d.y < 0) d.y = canvas.height;
+                    if (d.y > canvas.height) d.y = 0;
+                    ctx.beginPath();
+                    ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+                    ctx.fillStyle = d.color;
+                    ctx.globalAlpha =
+                        d.alpha * (0.5 + 0.5 * Math.sin(frame * 0.025 + d.x));
+                    ctx.fill();
+                });
+                ctx.globalAlpha = 1;
+                requestAnimationFrame(tick);
+            })();
+        })();
+
+        /* Destellos */
+        (function () {
+            const layer = document.getElementById("sparkle-layer");
+            if (!layer) return;
+            for (let i = 0; i < 22; i++) {
+                const s = document.createElement("div");
+                s.className = "sparkle-star";
+                s.style.cssText = `left:${5 + Math.random() * 90}%;top:${5 + Math.random() * 90}%;--d:${2.5 + Math.random() * 3.5}s;--dl:${-Math.random() * 4}s;width:${3 + Math.floor(Math.random() * 3) * 2}px;height:${3 + Math.floor(Math.random() * 3) * 2}px;`;
+                layer.appendChild(s);
+            }
+        })();
+
+        /* Animaciones entrada */
+        gsap.fromTo(
+            "#linea-sup, #linea-inf",
+            { scaleX: 0, opacity: 0 },
+            {
+                scaleX: 1,
+                opacity: 1,
+                duration: 1.2,
+                ease: "power3.out",
+                delay: 0.2,
+                stagger: 0.5,
+            },
+        );
+        gsap.fromTo(
+            ".quince-word",
+            { opacity: 0, x: -50 },
+            { opacity: 1, x: 0, duration: 1, ease: "power3.out", delay: 0.7 },
+        );
+        gsap.fromTo(
+            "#ornamento",
+            { opacity: 0, scale: 0.5 },
+            {
+                opacity: 1,
+                scale: 1,
+                duration: 0.8,
+                ease: "back.out(1.6)",
+                delay: 1,
+            },
+        );
+        gsap.fromTo(
+            "#texto-acompana",
+            { opacity: 0, y: 20 },
+            { opacity: 1, y: 0, duration: 0.9, ease: "power2.out", delay: 2.4 },
+        );
+
+        gsap.to(".ornam-diamante", {
+            textShadow:
+                "0 0 20px rgba(65,105,255,1), 0 0 40px rgba(65,105,255,0.6)",
+            duration: 1.8,
+            ease: "sine.inOut",
+            yoyo: true,
+            repeat: -1,
+            delay: 1.5,
+        });
+
+        /* Nombre — blanco con neón azul eléctrico */
+        function animarNombre() {
+            const texto = "Carlos Leonardo";
+            const contenedor = document.getElementById("nombre-typewriter");
+            if (!contenedor) return;
+            let html = "";
+            texto.split("").forEach((letra, i) => {
+                if (letra === " ") {
+                    html += `<span style="display:inline-block;width:0.3em;"></span>`;
+                } else {
+                    html += `<span class="letra-neon" style="
+                        display:inline-block;
+                        opacity:0;
+                        color:#ffffff;
+                        text-shadow:
+                            0 0 4px #ffffff,
+                            0 0 10px #4169ff,
+                            0 0 22px #4169ff,
+                            0 0 45px #2233cc,
+                            0 0 80px #1122aa;
+                        transform:translateY(35px) scale(0.7);
+                        filter:blur(6px);
+                        animation: neonKF 3s ease-in-out infinite;
+                        animation-delay: calc(${i} * 0.06s);
+                    ">${letra}</span>`;
+                }
+            });
+            contenedor.innerHTML = html;
+            gsap.to(".letra-neon", {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                filter: "blur(0px)",
+                duration: 0.8,
+                ease: "back.out(1.6)",
+                stagger: { each: 0.08, from: "start" },
+                delay: 1.3,
+            });
+        }
+        animarNombre();
+    });
+</script>
+
+<style>
+    .hero-varon {
+        min-height: 100svh;
+        position: relative;
+    }
+
+    .quince-word {
+        color: #ffffff;
+        text-shadow:
+            0 0 4px #ffffff,
+            0 0 10px #4169ff,
+            0 0 22px #4169ff,
+            0 0 45px #2233cc,
+            0 0 80px #1122aa;
+        animation: neonKF 3s ease-in-out infinite;
+    }
+
+    .ornamento {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+    }
+
+    .ornam-linea {
+        display: block;
+        flex: 1;
+        max-width: 100px;
+        height: 1px;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(65, 105, 255, 0.8),
+            rgba(255, 255, 255, 0.5)
+        );
+    }
+
+    .ornamento .ornam-linea:last-child {
+        background: linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.5),
+            rgba(65, 105, 255, 0.8),
+            transparent
+        );
+    }
+
+    .ornam-diamante {
+        color: #4169ff;
+        text-shadow:
+            0 0 10px rgba(65, 105, 255, 0.9),
+            0 0 22px rgba(65, 105, 255, 0.5);
+    }
+
+    .nombre-varon {
+        font-size: clamp(3.2rem, 10vw, 6.2rem);
+        line-height: 1.1;
+        letter-spacing: 0.02em;
+    }
+
+    .linea-deco {
+        height: 1px;
+        transform-origin: center;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(65, 105, 255, 0.5),
+            rgba(255, 255, 255, 0.7),
+            rgba(65, 105, 255, 0.5),
+            transparent
+        );
+    }
+
+    @keyframes neonKF {
+        0%,
+        100% {
+            text-shadow:
+                0 0 4px #ffffff,
+                0 0 10px #4169ff,
+                0 0 22px #4169ff,
+                0 0 45px #2233cc,
+                0 0 80px #1122aa;
+        }
+        50% {
+            text-shadow:
+                0 0 2px #ffffff,
+                0 0 6px #2244dd,
+                0 0 14px #2233bb,
+                0 0 28px #111888;
+        }
+    }
+
+    .letra-neon {
+        color: #ffffff;
+        will-change: transform, opacity;
+        animation: neonKF 3s ease-in-out infinite;
+    }
+
+    .sparkle-star {
+        position: absolute;
+        background: #4169ff;
+        clip-path: polygon(
+            50% 0%,
+            61% 35%,
+            98% 35%,
+            68% 57%,
+            79% 91%,
+            50% 70%,
+            21% 91%,
+            32% 57%,
+            2% 35%,
+            39% 35%
+        );
+        animation: sparkleTwinkle var(--d, 3s) ease-in-out infinite
+            var(--dl, 0s);
+        opacity: 0;
+    }
+
+    @keyframes sparkleTwinkle {
+        0% {
+            opacity: 0;
+            transform: scale(0) rotate(0deg);
+        }
+        25% {
+            opacity: 0.9;
+            transform: scale(1) rotate(45deg);
+        }
+        75% {
+            opacity: 0.5;
+            transform: scale(0.8) rotate(90deg);
+        }
+        100% {
+            opacity: 0;
+            transform: scale(0) rotate(180deg);
+        }
+    }
+</style>
