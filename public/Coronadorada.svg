@@ -1,13 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
   <defs>
     <linearGradient id="gold" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#FFE87C"/>
-      <stop offset="50%" style="stop-color:#FFD700"/>
-      <stop offset="100%" style="stop-color:#DAA520"/>
+      <stop offset="0%" style="stop-color:#6688ff"/>
+      <stop offset="50%" style="stop-color:#4169ff"/>
+      <stop offset="100%" style="stop-color:#2244dd"/>
     </linearGradient>
     <radialGradient id="ruby">
-      <stop offset="0%" style="stop-color:#FF6B6B"/>
-      <stop offset="100%" style="stop-color:#C92A2A"/>
+      <stop offset="0%" style="stop-color:#6688ff"/>
+      <stop offset="100%" style="stop-color:#2244dd"/>
     </radialGradient>
   </defs>
   
@@ -17,13 +17,13 @@
   <!-- Corona elegante -->
   <path d="M 20 55 Q 50 45 80 55 L 75 70 Q 50 65 25 70 Z" 
         fill="url(#gold)" 
-        stroke="#B8860B" 
+        stroke="#2233cc" 
         stroke-width="2"/>
   
   <!-- Picos superiores -->
-  <circle cx="30" cy="48" r="7" fill="url(#gold)" stroke="#B8860B" stroke-width="2"/>
-  <circle cx="50" cy="40" r="9" fill="url(#gold)" stroke="#B8860B" stroke-width="2"/>
-  <circle cx="70" cy="48" r="7" fill="url(#gold)" stroke="#B8860B" stroke-width="2"/>
+  <circle cx="30" cy="48" r="7" fill="url(#gold)" stroke="#2233cc" stroke-width="2"/>
+  <circle cx="50" cy="40" r="9" fill="url(#gold)" stroke="#2233cc" stroke-width="2"/>
+  <circle cx="70" cy="48" r="7" fill="url(#gold)" stroke="#2233cc" stroke-width="2"/>
   
   <!-- Gemas -->
   <circle cx="30" cy="48" r="3" fill="url(#ruby)"/>
@@ -35,6 +35,6 @@
         font-family="'Didot', serif" 
         font-size="32" 
         font-weight="bold" 
-        fill="#FFD700" 
+        fill="#4169ff" 
         text-anchor="middle">15</text>
 </svg>
